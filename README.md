@@ -65,17 +65,11 @@ npm test
 
 ## Autor
 Renata CPF
-```
-
-
 
 ### Uso do token nas rotas protegidas
-
 ```bash
-
 curl -H "Authorization: Bearer <token>" http://localhost:3000/users
 ```
-
 
 ## Testes de autenticação
 
