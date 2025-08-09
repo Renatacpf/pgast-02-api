@@ -18,12 +18,14 @@ jobs:
           node-version: '18'
       - name: Instalar dependências
         run: npm install
-      - name: Instalar mochawesome
-        run: npm install mochawesome --save-dev
-      - name: Rodar testes e gerar relatório HTML
-        run: npx mocha "test/**/*.js" --reporter mochawesome
-      - name: Salvar relatório como artefato
-        uses: actions/upload-artifact@v4
+      - name: Instalar mocha-junit-reporter
+        run: npm install mocha-junit-reporter --save-dev
+      - name: Rodar testes e gerar relatório JUnit
+        run: npx mocha "test/**/*.js" --reporter mocha-junit-reporter --reporter-options mochaFile=results.xml
+      - name: Publicar relatório visual no summary
+        uses: dorny/test-reporter@v1
+        if: always()
         with:
-          name: mochawesome-report
-          path: mochawesome-report
+          name: Mocha Tests
+          path: results.xml
+          reporter: java-junit
