@@ -1,0 +1,376 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "info": {
+    "title": "Banco API",
+    "version": "1.0.0",
+    "description": "API para registro, login, consulta de usuários e transferência de valores."
+  },
+  "tags": [
+    { "name": "Autenticação", "description": "Login e geração de token JWT" },
+    { "name": "Operações de Usuário", "description": "Registro, consulta, atualização e remoção de usuários" },
+    { "name": "Transações", "description": "Transferências de valores entre usuários" }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Operações de Usuário"],
+        "summary": "Registrar usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                      "login": { "type": "string" },
+                      "senha": { "type": "string" },
+                      "favorecido": { "type": "boolean" }
+                },
+                "required": ["login", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário registrado" },
+          "409": { "description": "Usuário já existe" },
+          "400": { "description": "Dados inválidos" }
+          },
+          "default": {
+            "description": "Exemplo de resposta",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Usuário registrado com sucesso"
+                }
+              }
+            }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Login de usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                    "login": { "type": "string" },
+                    "senha": { "type": "string" }
+                },
+                "required": ["login", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login realizado" },
+          "401": { "description": "Credenciais inválidas" },
+          "400": { "description": "Dados inválidos" }
+          },
+          "default": {
+            "description": "Exemplo de resposta",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Credenciais inválidas"
+                }
+              }
+            }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Operações de Usuário"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Consultar usuários",
+        "parameters": [
+          {
+            "name": "favorecido",
+            "in": "query",
+            "description": "Filtrar por favorecido",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Lista de usuários" },
+          "400": { "description": "Parâmetros inválidos" },
+          "401": { "description": "Token expirado, inválido ou não informado." }
+        }
+      },
+      "put": {
+        "tags": ["Operações de Usuário"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Atualizar usuário",
+    "description": "Atualizar usuário e inserir saldo",
+    "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": { "type": "string" },
+                  "senha": { "type": "string" },
+                  "favorecido": { "type": "boolean" }
+                   ,
+                   "saldo": { "type": "number", "description": "Valor a ser adicionado ao saldo do usuário", "example": 1000 }
+                },
+                "required": ["login"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado" },
+          "404": { "description": "Usuário não encontrado" },
+          "400": { "description": "Dados inválidos" },
+          "401": { "description": "Token expirado, inválido ou não informado." }
+        }
+      },
+      "delete": {
+        "tags": ["Operações de Usuário"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Remover usuário",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+                  "info": {
+                    "title": "Banco API",
+                    "version": "1.0.0",
+                    "description": "API para registro, login, consulta, atualização, remoção de usuários e transferência de valores.\n\nEstrutura: controller/model/service.\n\nRegras:\n- Transferência para favorecido: sem limite.\n- Transferência para não favorecido: até R$ 1000,00.\n- Saldo do remetente deve ser suficiente.\n- JWT obrigatório nas rotas protegidas.\n- Token expira em 10 minutos."
+                  },
+                  "tags": [
+                    { "name": "Autenticação", "description": "Login e geração de token JWT" },
+                    { "name": "Operações de Usuário", "description": "Registro, consulta, atualização, remoção e saldo de usuários" },
+                    { "name": "Transações", "description": "Transferências de valores entre usuários" }
+                  ],
+                  "paths": {
+                    "/users/register": {
+                      "post": {
+                        "tags": ["Operações de Usuário"],
+                        "summary": "Registrar usuário",
+                        "requestBody": {
+                          "required": true,
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "login": { "type": "string", "example": "user1" },
+                                  "senha": { "type": "string", "example": "123" },
+                                  "favorecido": { "type": "boolean", "example": true }
+                                },
+                                "required": ["login", "senha"]
+                              }
+                            }
+                          }
+                        },
+                        "responses": {
+                          "201": { "description": "Usuário registrado" },
+                          "409": { "description": "Usuário já existe" },
+                          "400": { "description": "Dados inválidos" }
+                        }
+                      }
+                    },
+                    "/users/login": {
+                      "post": {
+                        "tags": ["Autenticação"],
+                        "summary": "Login de usuário",
+                        "requestBody": {
+                          "required": true,
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "login": { "type": "string", "example": "user1" },
+                                  "senha": { "type": "string", "example": "123" }
+                                },
+                                "required": ["login", "senha"]
+                              }
+                            }
+                          }
+                        },
+                        "responses": {
+                          "200": { "description": "Login realizado", "content": { "application/json": { "example": { "message": "Login realizado com sucesso", "token": "<jwt>" } } } },
+                          "401": { "description": "Credenciais inválidas" },
+                          "400": { "description": "Dados inválidos" }
+                        }
+                      }
+                    },
+                    "/users": {
+                      "get": {
+                        "tags": ["Operações de Usuário"],
+                        "security": [{ "bearerAuth": [] }],
+                        "summary": "Consultar usuários",
+                        "parameters": [
+                          { "name": "favorecido", "in": "query", "schema": { "type": "boolean" }, "description": "Filtrar por favorecido" }
+                        ],
+                        "responses": {
+                          "200": { "description": "Lista de usuários", "content": { "application/json": { "example": [ { "login": "user1", "favorecido": true, "saldo": 5000 }, { "login": "user2", "favorecido": false, "saldo": 100 } ] } } },
+                          "401": { "description": "Token inválido ou expirado" }
+                        }
+                      },
+                      "put": {
+                        "tags": ["Operações de Usuário"],
+                        "security": [{ "bearerAuth": [] }],
+                        "summary": "Atualizar usuário ou inserir saldo",
+                        "requestBody": {
+                          "required": true,
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "login": { "type": "string", "example": "user1" },
+                                  "senha": { "type": "string", "example": "123" },
+                                  "favorecido": { "type": "boolean", "example": true },
+                                  "saldo": { "type": "number", "example": 5000 }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "responses": {
+                          "200": { "description": "Usuário atualizado" },
+                          "404": { "description": "Usuário não encontrado" },
+                          "401": { "description": "Token inválido ou expirado" }
+                        }
+                      },
+                      "delete": {
+                        "tags": ["Operações de Usuário"],
+                        "security": [{ "bearerAuth": [] }],
+                        "summary": "Remover usuário",
+                        "parameters": [
+                          { "name": "login", "in": "query", "schema": { "type": "string" }, "description": "Login do usuário a remover" }
+                        ],
+                        "responses": {
+                          "200": { "description": "Usuário removido" },
+                          "404": { "description": "Usuário não encontrado" },
+                          "401": { "description": "Token inválido ou expirado" }
+                        }
+                      }
+                    },
+                    "/transfer": {
+                      "post": {
+                        "tags": ["Transações"],
+                        "security": [{ "bearerAuth": [] }],
+                        "summary": "Transferir valores",
+                        "requestBody": {
+                          "required": true,
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "remetente": { "type": "string", "example": "user1" },
+                                  "destinatario": { "type": "string", "example": "user2" },
+                                  "valor": { "type": "number", "example": 100 }
+                                },
+                                "required": ["remetente", "destinatario", "valor"]
+                              }
+                            }
+                          }
+                        },
+                        "responses": {
+                          "201": { "description": "Transferência realizada" },
+                          "400": { "description": "Dados inválidos ou saldo insuficiente" },
+                          "404": { "description": "Usuário não encontrado" },
+                          "401": { "description": "Token inválido ou expirado" }
+                        }
+                      },
+                      "get": {
+                        "tags": ["Transações"],
+                        "security": [{ "bearerAuth": [] }],
+                        "summary": "Consultar transferências",
+                        "parameters": [
+                          { "name": "remetente", "in": "query", "schema": { "type": "string" }, "description": "Filtrar por remetente" }
+                        ],
+                        "responses": {
+                          "200": { "description": "Lista de transferências", "content": { "application/json": { "example": [ { "remetente": "user1", "destinatario": "user2", "valor": 100, "data": "2025-08-09T12:00:00Z" } ] } } },
+                          "401": { "description": "Token inválido ou expirado" }
+                        }
+                      }
+                    }
+                  },
+            "description": "Login do usuário a remover",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Usuário removido" },
+          "404": { "description": "Usuário não encontrado" },
+          "400": { "description": "Parâmetros inválidos" },
+          "401": { "description": "Token expirado, inválido ou não informado." }
+        }
+      }
+    },
+    "/transfer": {
+      "post": {
+        "tags": ["Transações"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Transferir valores",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "remetente": { "type": "string" },
+                  "destinatario": { "type": "string" },
+                  "valor": { "type": "number" }
+                },
+                "required": ["remetente", "destinatario", "valor"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Transferência realizada" },
+          "403": { "description": "Transferência não permitida" },
+          "404": { "description": "Usuário não encontrado" },
+          "400": { "description": "Dados inválidos" },
+          "401": { "description": "Token expirado, inválido ou não informado." }
+        }
+      },
+      "get": {
+        "tags": ["Transações"],
+        "security": [{ "bearerAuth": [] }],
+        "summary": "Consultar transferências (exemplo)",
+        "parameters": [
+          {
+            "name": "remetente",
+            "in": "query",
+            "description": "Filtrar por remetente",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Lista de transferências" },
+          "400": { "description": "Parâmetros inválidos" },
+          "401": { "description": "Token expirado, inválido ou não informado." }
+        }
+      }
+    }
+  }
+}
