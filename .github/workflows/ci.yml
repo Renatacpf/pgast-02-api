@@ -22,7 +22,7 @@ jobs:
         run: |
           npx mocha "test/**/*.js" --reporter mochawesome
       - name: Salvar relatório como artefato
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mochawesome-report
           path: mochawesome-report
