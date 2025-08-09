@@ -69,7 +69,7 @@ describe('Transfer Controller', () => {
 		it('Quando informo remetente e destinatário inexistentes recebo 404', async () => {
 		const stub = sinon.stub(transferService, 'transfer').callsFake((req, res) => {
 			if (req.body.remetente === 'inexistente' || req.body.destinatario === 'inexistente') {
-				return res.status(404).json({ error: 'Usuário inexistente ou não encontrado.' });
+				return res.status(404).json({ error: 'Usuário não encontrado.' });
 			}
 			res.status(200).json({ message: 'ok' });
 		});
