@@ -51,13 +51,19 @@ Após o login, utilize o token JWT retornado para acessar rotas protegidas:
 curl -H "Authorization: Bearer <token>" http://localhost:3000/users
 ```
 
-## Testes
-Execute os testes automatizados:
+## Testes Automatizados e Integração Contínua
+Execute os testes automatizados localmente:
 ```bash
 npm test
 ```
 
 Todos os cenários de integração e controller passaram com sucesso (21 passing).
+
+Os testes são organizados em:
+- `test/controller/`: testes unitários dos controllers
+- `test/integration/`: testes de integração da API
+
+Pipeline de integração contínua configurada via GitHub Actions (`.github/workflows/ci.yml`), que executa todos os testes automaticamente a cada push ou pull request para o branch `main`.
 
 ## Observações
 - Transferência para favorecido: sem limite
