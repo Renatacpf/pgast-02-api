@@ -64,7 +64,9 @@ Os testes são organizados em:
 - `test/controller/`: testes unitários dos controllers
 - `test/integration/`: testes de integração da API
 
+
 Pipeline de integração contínua configurada via GitHub Actions (`.github/workflows/ci.yml`), que executa todos os testes automaticamente a cada push ou pull request para o branch `main`.
+O relatório dos testes é publicado visualmente no summary do workflow, acessível diretamente pela interface do GitHub Actions, sem necessidade de download.
 
 ## Observações
 - Transferência para favorecido: sem limite
