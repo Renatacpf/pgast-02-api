@@ -1,5 +1,5 @@
 const express = require('express');
-const { expect } = require('chai');
+let expect;
 const request = require('supertest');
 const sinon = require('sinon');
 
@@ -7,9 +7,14 @@ describe('Transfer Controller', () => {
 	let app;
 	let transferService;
 
-	beforeEach(() => {
+		beforeEach(async () => {
 		delete require.cache[require.resolve('../../service/transferService')];
-		transferService = require('../../service/transferService');
+			transferService = require('../../service/transferService');
+			// Importa chai dinamicamente para evitar erro de ES Module
+			if (!expect) {
+				const chai = await import('chai');
+				expect = chai.expect;
+			}
 		app = express();
 		app.use(express.json());
 	});
