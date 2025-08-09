@@ -1,8 +1,12 @@
 const express = require('express');
 const request = require('supertest');
 const sinon = require('sinon');
-const chai = require('chai');
-const expect = chai.expect;
+
+let expect;
+before(async () => {
+	const chai = await import('chai');
+	expect = chai.expect;
+});
 
 describe('User Controller', () => {
 	let app;
