@@ -18,9 +18,10 @@ jobs:
           node-version: '18'
       - name: Instalar dependências
         run: npm install
+      - name: Instalar mochawesome
+        run: npm install mochawesome --save-dev
       - name: Rodar testes e gerar relatório HTML
-        run: |
-          npx mocha "test/**/*.js" --reporter mochawesome
+        run: npx mocha "test/**/*.js" --reporter mochawesome
       - name: Salvar relatório como artefato
         uses: actions/upload-artifact@v4
         with:
