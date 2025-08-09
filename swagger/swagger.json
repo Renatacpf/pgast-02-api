@@ -10,9 +10,9 @@
     }
   },
   "info": {
-    "title": "Banco API",
+    "title": "PGATS-02-API",
     "version": "1.0.0",
-    "description": "API para registro, login, consulta de usuários e transferência de valores."
+    "description": "API REST para gerenciamento de usuários, autenticação JWT e transferências bancárias. Testes automatizados de integração e controller inclusos."
   },
   "tags": [
     { "name": "Autenticação", "description": "Login e geração de token JWT" },

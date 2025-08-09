@@ -7,8 +7,10 @@
     "test": "mocha test/*.test.js"
   },
   "dependencies": {
+    "chai": "^5.2.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "sinon": "^21.0.0",
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {

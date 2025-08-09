@@ -1,10 +1,10 @@
 const request = require('supertest');
-const app = require('../app');
+const app = require('../../app');
 const assert = require('assert');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'supersecret';
 
-describe('Banco API', function() {
+describe('Testes de Integração', function() {
   let user1 = { login: 'user1', senha: '123', favorecido: true };
   let user2 = { login: 'user2', senha: '456', favorecido: false };
   let token;

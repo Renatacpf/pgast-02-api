@@ -57,6 +57,8 @@ Execute os testes automatizados:
 npm test
 ```
 
+Todos os cenários de integração e controller passaram com sucesso (21 passing).
+
 ## Observações
 - Transferência para favorecido: sem limite
 - Transferência para não favorecido: até R$ 1000,00
