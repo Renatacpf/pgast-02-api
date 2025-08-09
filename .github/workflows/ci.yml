@@ -1,4 +1,8 @@
+
 name: CI - PGATS-02-API
+permissions:
+  checks: write
+  pull-requests: write
 
 on:
   push:
