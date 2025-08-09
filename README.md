@@ -84,4 +84,4 @@ Os testes automatizados validam cenários de token válido, inválido e expirado
 Os testes estão em `test/api.test.js` e cobrem todos os fluxos principais.
 
 ## Autor
-Renata CPF
+Renata França
