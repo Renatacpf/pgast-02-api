@@ -18,5 +18,11 @@ jobs:
           node-version: '18'
       - name: Instalar dependências
         run: npm install
-      - name: Rodar testes
-        run: npx mocha "test/**/*.js"
+      - name: Rodar testes e gerar relatório HTML
+        run: |
+          npx mocha "test/**/*.js" --reporter mochawesome
+      - name: Salvar relatório como artefato
+        uses: actions/upload-artifact@v3
+        with:
+          name: mochawesome-report
+          path: mochawesome-report
