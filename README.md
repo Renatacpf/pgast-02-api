@@ -52,9 +52,10 @@ curl -H "Authorization: Bearer <token>" http://localhost:3000/users
 ```
 
 ## Testes Automatizados e Integração Contínua
-Execute os testes automatizados localmente:
+
+Execute todos os testes automatizados localmente:
 ```bash
-npm test
+npx mocha "test/**/*.js"
 ```
 
 Todos os cenários de integração e controller passaram com sucesso (21 passing).
