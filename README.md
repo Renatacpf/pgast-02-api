@@ -63,9 +63,6 @@ npm test
 - Saldo do remetente deve ser suficiente
 - Token expira em 10 minutos
 
-## Autor
-Renata CPF
-
 ## Uso do token nas rotas protegidas
 ```bash
 curl -H "Authorization: Bearer <token>" http://localhost:3000/users
@@ -84,4 +81,7 @@ Os testes automatizados validam cenários de token válido, inválido e expirado
 
 ## Testes Automatizados
 
-Os testes estão em `test/api.test.js` e cobrem todos os fluxos principais:
+Os testes estão em `test/api.test.js` e cobrem todos os fluxos principais.
+
+## Autor
+Renata CPF
