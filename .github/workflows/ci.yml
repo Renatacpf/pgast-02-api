@@ -1,4 +1,3 @@
-
 name: CI - PGATS-02-API
 permissions:
   checks: write
@@ -16,20 +15,42 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
+
       - name: Instalar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
       - name: Instalar dependências
         run: npm install
-      - name: Instalar mocha-junit-reporter
-        run: npm install mocha-junit-reporter --save-dev
-      - name: Rodar testes e gerar relatório JUnit
-        run: npx mocha "test/**/*.js" --reporter mocha-junit-reporter --reporter-options mochaFile=results.xml
-      - name: Publicar relatório visual no summary
+
+      # Testes de Controller
+      - name: Rodar testes do Controller
+        run: npm run test-controller -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-controller.xml
+
+      - name: Publicar relatório Controller
         uses: dorny/test-reporter@v1
         if: always()
         with:
-          name: Mocha Tests
-          path: results.xml
+          name: Controller Tests
+          path: results-controller.xml
+          reporter: java-junit
+
+      # Subir a API para os testes de integração
+      - name: Subir API
+        run: npm start &
+
+      - name: Esperar API estar funcionando
+        run: sleep 5
+
+      # Testes de Integração
+      - name: Rodar testes de Integração
+        run: npm run test-integration -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-integration.xml
+
+      - name: Publicar relatório Integração
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Integration Tests
+          path: results-integration.xml
           reporter: java-junit
