@@ -89,12 +89,10 @@ query {
 - POST `/users/login`  
    Body: `{ "login": "string", "senha": "string" }`
   
-   Body: `{ "login": "string", "senha": "string", "favorecido": true|false }`
-
    Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
 
 ### Transferências
-- POST `/transfers`  
+- POST `/transfer`  
    Body: `{ "remetente": "string", "destinatario": "string", "valor": number }`
 
 ## Autenticação JWT
@@ -134,7 +132,8 @@ curl -H "Authorization: Bearer <token>" http://localhost:3000/users
 Os testes automatizados validam cenários de token válido, inválido e expirado.
 
 ## Regras de Negócio
-- Login e senha obrigatórios para login e registro
+- Login, senha e saldo obrigatórios para registro
+- Login e senha obrigatórios para login
 - Não é permitido registrar usuários duplicados
 - Transferências acima de R$ 5.000,00 só para favorecidos
 - Transferências para não favorecidos só podem ser realizadas se o valor for menor que R$ 5.000,00
