@@ -38,19 +38,9 @@ Acesse a documentação Swagger em: [http://localhost:3000/api-docs](http://loca
     ```
 3. Acesse o playground em: [http://localhost:4000/graphql](http://localhost:4000/graphql)
 
-### Exemplos de Queries e Mutations
-
-#### Registrar Usuário
-```graphql
-mutation {
    registerUser(login: "novo", senha: "123", favorecido: true) {
       message
    }
-}
-```
-
-#### Login de Usuário
-```graphql
 mutation {
    loginUser(login: "novo", senha: "123") {
       token
@@ -94,20 +84,13 @@ query {
       destinatario
       valor
    }
-}
-```
-
 ## Endpoints Principais
 ### Autenticação
 - POST `/users/login`  
    Body: `{ "login": "string", "senha": "string" }`
   
-### Registro de Usuário
-- POST `/users/register`  
    Body: `{ "login": "string", "senha": "string", "favorecido": true|false }`
 
-### Atualizar Usuário e Inserir Saldo
-- PUT `/users`  
    Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
 
 ### Transferências
@@ -129,9 +112,6 @@ npx mocha "test/**/*.js"
 
 Todos os cenários de integração e controller passaram com sucesso (21 passing).
 
-Os testes são organizados em:
-- `test/controller/`: testes unitários dos controllers
-- `test/external/`: testes de integração da API
 - `test/mutation/`: testes Mutation GraphQL
 
 
