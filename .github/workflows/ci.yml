@@ -54,3 +54,15 @@ jobs:
           name: Integration Tests
           path: results-integration.xml
           reporter: java-junit
+
+      # Testes externos GraphQL
+      - name: Rodar testes externos GraphQL
+        run: npx mocha test/external/graphqlTransfer.test.js --reporter mocha-junit-reporter --reporter-options mochaFile=results-graphql.xml
+
+      - name: Publicar relatório GraphQL
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: GraphQL Tests
+          path: results-graphql.xml
+          reporter: java-junit

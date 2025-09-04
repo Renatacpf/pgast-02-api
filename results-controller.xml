@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.214" tests="13" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-09-04T18:56:53" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Transfer Controller" timestamp="2025-09-04T18:56:53" tests="5" file="C:\Users\User\Renata\PosGraduacao\ProjetosJavaScript\pgast-02-api\test\controller\transferController.test.js" time="0.069" failures="0">
+    <testcase name="Transfer Controller Quando informo remetente, destinatário e valor válidos recebo 200" time="0.037" classname="Quando informo remetente, destinatário e valor válidos recebo 200">
+    </testcase>
+    <testcase name="Transfer Controller Quando consulto transferências recebo 200 e um array" time="0.005" classname="Quando consulto transferências recebo 200 e um array">
+    </testcase>
+    <testcase name="Transfer Controller Quando informo campos obrigatórios ausentes recebo 400" time="0.005" classname="Quando informo campos obrigatórios ausentes recebo 400">
+    </testcase>
+    <testcase name="Transfer Controller Quando informo remetente e destinatário inexistentes recebo 404" time="0.005" classname="Quando informo remetente e destinatário inexistentes recebo 404">
+    </testcase>
+    <testcase name="Transfer Controller Quando informo valor acima de 5000 para não favorecido recebo 403" time="0.006" classname="Quando informo valor acima de 5000 para não favorecido recebo 403">
+    </testcase>
+  </testsuite>
+  <testsuite name="User Controller" timestamp="2025-09-04T18:56:53" tests="8" file="C:\Users\User\Renata\PosGraduacao\ProjetosJavaScript\pgast-02-api\test\controller\userController.test.js" time="0.099" failures="0">
+    <testcase name="User Controller deve registrar usuário novo" time="0.006" classname="deve registrar usuário novo">
+    </testcase>
+    <testcase name="User Controller não deve registrar usuário duplicado" time="0.006" classname="não deve registrar usuário duplicado">
+    </testcase>
+    <testcase name="User Controller deve logar usuário válido e receber token" time="0.004" classname="deve logar usuário válido e receber token">
+    </testcase>
+    <testcase name="User Controller não deve logar com senha errada" time="0.007" classname="não deve logar com senha errada">
+    </testcase>
+    <testcase name="User Controller deve consultar todos os usuários" time="0.005" classname="deve consultar todos os usuários">
+    </testcase>
+    <testcase name="User Controller deve atualizar usuário" time="0.004" classname="deve atualizar usuário">
+    </testcase>
+    <testcase name="User Controller deve remover usuário" time="0.006" classname="deve remover usuário">
+    </testcase>
+    <testcase name="User Controller não deve remover usuário inexistente" time="0.003" classname="não deve remover usuário inexistente">
+    </testcase>
+  </testsuite>
+</testsuites>
