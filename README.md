@@ -1,59 +1,3 @@
-# Testes automatizados externos GraphQL
-
-Os testes de mutation de transferência via GraphQL estão em `test/external/graphqlTransfer.test.js` e cobrem:
-- Transferência com sucesso
-- Sem saldo disponível
-- Token não informado
-
-Execute todos os testes com:
-```bash
-npm test
-```
-
-## Exemplo de Mutation GraphQL
-
-### Registrar usuário
-```graphql
-mutation {
-   registerUser(login: "userA", senha: "123", favorecido: true, saldo: 1000) {
-      message
-   }
-}
-```
-
-### Login para obter token
-```graphql
-mutation {
-   loginUser(login: "userA", senha: "123") {
-      token
-      message
-   }
-}
-```
-
-### Transferência (autenticado)
-```graphql
-mutation {
-   createTransfer(remetente: "userA", destinatario: "userB", valor: 100) {
-      remetente
-      destinatario
-      valor
-   }
-}
-```
-No playground, adicione o header:
-```
-{
-   "Authorization": "Bearer SEU_TOKEN_AQUI"
-}
-```
-
-## Observações
-- Todas as mutations de transferência exigem autenticação JWT.
-- O campo saldo é obrigatório no registro de usuário.
-
-
-
 # PGATS-02-API
 
 API REST e GraphQL para gerenciamento de usuários e transferências bancárias.
@@ -218,6 +162,60 @@ Os testes automatizados validam cenários de token válido, inválido e expirado
 ## Testes Automatizados
 
 Os testes estão em `test/api.test.js` e cobrem todos os fluxos principais.
+
+# Testes automatizados externos GraphQL
+
+Os testes de mutation de transferência via GraphQL estão em `test/external/graphqlTransfer.test.js` e cobrem:
+- Transferência com sucesso
+- Sem saldo disponível
+- Token não informado
+
+Execute todos os testes com:
+```bash
+npm test
+```
+
+## Exemplo de Mutation GraphQL
+
+### Registrar usuário
+```graphql
+mutation {
+   registerUser(login: "userA", senha: "123", favorecido: true, saldo: 1000) {
+      message
+   }
+}
+```
+
+### Login para obter token
+```graphql
+mutation {
+   loginUser(login: "userA", senha: "123") {
+      token
+      message
+   }
+}
+```
+
+### Transferência (autenticado)
+```graphql
+mutation {
+   createTransfer(remetente: "userA", destinatario: "userB", valor: 100) {
+      remetente
+      destinatario
+      valor
+   }
+}
+```
+No playground, adicione o header:
+```
+{
+   "Authorization": "Bearer SEU_TOKEN_AQUI"
+}
+```
+
+## Observações
+- Todas as mutations de transferência exigem autenticação JWT.
+- O campo saldo é obrigatório no registro de usuário.
 
 ## Autor
 Renata França
