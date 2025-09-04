@@ -24,6 +24,12 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      # Configurar variáveis de ambiente necessárias
+      - name: Configurar variáveis de ambiente
+        run: |
+          echo "JWT_SECRET=supersecret" >> $GITHUB_ENV
+          # adicione aqui outras variáveis, como DB_HOST, DB_USER, etc
+
       # Testes de Controller
       - name: Rodar testes do Controller
         run: npm run test-controller -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-controller.xml
@@ -36,12 +42,21 @@ jobs:
           path: results-controller.xml
           reporter: java-junit
 
-      # Subir a API para os testes de integração
+      # Subir a API em background
       - name: Subir API
         run: npm start &
-
-      - name: Esperar API estar funcionando
-        run: sleep 5
+      
+      # Esperar API estar disponível
+      - name: Aguardar API na porta 3000
+        run: |
+          for i in {1..20}; do
+            if nc -z localhost 3000; then
+              echo "✅ API está pronta!"
+              break
+            fi
+            echo "⏳ Aguardando API..."
+            sleep 2
+          done
 
       # Testes de Integração
       - name: Rodar testes de Integração
@@ -57,7 +72,7 @@ jobs:
 
       # Testes externos GraphQL
       - name: Rodar testes externos GraphQL
-        run: npx mocha test/external/graphqlTransfer.test.js --reporter mocha-junit-reporter --reporter-options mochaFile=results-graphql.xml
+        run: npx mocha test/external/graphqlTransfer.test.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=results-graphql.xml
 
       - name: Publicar relatório GraphQL
         uses: dorny/test-reporter@v1
