@@ -1,7 +1,13 @@
 const users = [];
 
+
 exports.addUser = (user) => {
+  if (typeof user.saldo !== 'number') throw new Error('Saldo obrigatório no cadastro');
   users.push(user);
+};
+
+exports.clearUsers = () => {
+  users.length = 0;
 };
 
 exports.findByLogin = (login) => {

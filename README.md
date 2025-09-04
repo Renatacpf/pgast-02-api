@@ -1,8 +1,62 @@
+# Testes automatizados externos GraphQL
+
+Os testes de mutation de transferência via GraphQL estão em `test/external/graphqlTransfer.test.js` e cobrem:
+- Transferência com sucesso
+- Sem saldo disponível
+- Token não informado
+
+Execute todos os testes com:
+```bash
+npm test
+```
+
+## Exemplo de Mutation GraphQL
+
+### Registrar usuário
+```graphql
+mutation {
+   registerUser(login: "userA", senha: "123", favorecido: true, saldo: 1000) {
+      message
+   }
+}
+```
+
+### Login para obter token
+```graphql
+mutation {
+   loginUser(login: "userA", senha: "123") {
+      token
+      message
+   }
+}
+```
+
+### Transferência (autenticado)
+```graphql
+mutation {
+   createTransfer(remetente: "userA", destinatario: "userB", valor: 100) {
+      remetente
+      destinatario
+      valor
+   }
+}
+```
+No playground, adicione o header:
+```
+{
+   "Authorization": "Bearer SEU_TOKEN_AQUI"
+}
+```
+
+## Observações
+- Todas as mutations de transferência exigem autenticação JWT.
+- O campo saldo é obrigatório no registro de usuário.
+
 
 
 # PGATS-02-API
 
-API REST para gerenciamento de usuários e transferências bancárias.
+API REST e GraphQL para gerenciamento de usuários e transferências bancárias.
 
 ## Funcionalidades
 - Registro de usuários (com opção de favorecido)
@@ -14,6 +68,7 @@ API REST para gerenciamento de usuários e transferências bancárias.
 ## Tecnologias
 - Node.js
 - Express
+- Apollo Server (GraphQL)
 - Mocha (testes)
 - Swagger (documentação)
 
@@ -22,11 +77,81 @@ API REST para gerenciamento de usuários e transferências bancárias.
 npm install
 ```
 
-## Uso
+## Uso da API REST
 ```bash
 npm start
 ```
 Acesse a documentação Swagger em: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+
+## Uso da API GraphQL
+1. Instale as dependências adicionais:
+    ```bash
+    npm install apollo-server-express graphql jsonwebtoken
+    ```
+2. Inicie o servidor GraphQL:
+    ```bash
+    node graphql/server.js
+    ```
+3. Acesse o playground em: [http://localhost:4000/graphql](http://localhost:4000/graphql)
+
+### Exemplos de Queries e Mutations
+
+#### Registrar Usuário
+```graphql
+mutation {
+   registerUser(login: "novo", senha: "123", favorecido: true) {
+      message
+   }
+}
+```
+
+#### Login de Usuário
+```graphql
+mutation {
+   loginUser(login: "novo", senha: "123") {
+      token
+      message
+   }
+}
+```
+
+#### Criar Transferência (requer token JWT)
+```graphql
+mutation {
+   createTransfer(remetente: "novo", destinatario: "user2", valor: 100) {
+      remetente
+      destinatario
+      valor
+   }
+}
+```
+No playground, adicione o header:
+```
+{
+   "Authorization": "Bearer SEU_TOKEN_AQUI"
+}
+```
+
+#### Consultar Usuários (requer token JWT)
+```graphql
+query {
+   users {
+      login
+      favorecido
+   }
+}
+```
+
+#### Consultar Transferências (requer token JWT)
+```graphql
+query {
+   transfers {
+      remetente
+      destinatario
+      valor
+   }
+}
+```
 
 ## Endpoints Principais
 ### Autenticação

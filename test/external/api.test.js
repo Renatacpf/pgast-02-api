@@ -4,28 +4,35 @@ const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'supersecret';
 
 describe('Testes de Integração', function() {
-  let user1 = { login: 'user1', senha: '123', favorecido: true };
-  let user2 = { login: 'user2', senha: '456', favorecido: false };
+  const userRepository = require('../../model/userModel');
+
+  beforeEach(function() {
+    userRepository.clearUsers();
+  });
+  let user1 = { login: 'user1', senha: '123', favorecido: true, saldo: 100 };
+  let user2 = { login: 'user2', senha: '456', favorecido: false, saldo: 50 };
   let token;
 
   it('deve registrar usuário novo', async function() {
-    const res = await request.post('/users/register').send(user1);
-    assert.strictEqual(res.status, 201);
-    assert(res.body.message.includes('sucesso'));
+  const uniqueLogin = 'user_' + Date.now();
+  await request.delete('/users').query({ login: uniqueLogin });
+  const res = await request.post('/users/register').send({ login: uniqueLogin, senha: '123', favorecido: true, saldo: 100 });
+  assert.strictEqual(res.status, 201);
+  assert(res.body.message.includes('sucesso'));
   });
 
   it('não deve registrar usuário duplicado', async function() {
-    const res = await request.post('/users/register').send(user1);
+  const res = await request.post('/users/register').send(user1);
     assert.strictEqual(res.status, 409);
   });
 
   it('deve registrar outro usuário', async function() {
-    const res = await request.post('/users/register').send(user2);
+  const res = await request.post('/users/register').send(user2);
     assert.strictEqual(res.status, 201);
   });
 
   it('deve logar usuário válido e receber token', async function() {
-    const res = await request.post('/users/login').send({ login: 'user1', senha: '123' });
+  const res = await request.post('/users/login').send({ login: 'user1', senha: '123' });
     assert.strictEqual(res.status, 200);
     assert(res.body.message.includes('sucesso'));
     assert(res.body.token);
@@ -88,14 +95,14 @@ describe('Testes de Integração', function() {
 
   it('não deve transferir valor alto para não favorecido com token', async function() {
     await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user1', saldo: 10000 });
-    await request.post('/users/register').send({ login: 'user3', senha: '789', favorecido: false });
+  await request.post('/users/register').send({ login: 'user3', senha: '789', favorecido: false, saldo: 0 });
     await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user3', valor: 6000 });
     assert.strictEqual(res.status, 403);
   });
 
   it('deve transferir valor baixo para não favorecido com token', async function() {
-    await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
+  await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user3', valor: 100 });
     assert.strictEqual(res.status, 200);
   });

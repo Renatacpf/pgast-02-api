@@ -30,16 +30,44 @@
             "application/json": {
               "schema": {
                 "type": "object",
+        "properties": {
+          "login": { "type": "string" },
+          "senha": { "type": "string" },
+          "favorecido": { "type": "boolean" },
+          "saldo": { "type": "number", "format": "float", "description": "Saldo inicial do usuário (obrigatório)" }
+        },
+        "required": ["login", "senha", "saldo"]
+      }
+    },
+    "/transfer": {
+      "post": {
+        "tags": ["Transações"],
+        "summary": "Realizar transferência entre usuários (JWT obrigatório)",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
                 "properties": {
-                      "login": { "type": "string" },
-                      "senha": { "type": "string" },
-                      "favorecido": { "type": "boolean" }
+                  "remetente": { "type": "string" },
+                  "destinatario": { "type": "string" },
+                  "valor": { "type": "number", "format": "float" }
                 },
-                "required": ["login", "senha"]
+                "required": ["remetente", "destinatario", "valor"]
               }
             }
           }
         },
+        "responses": {
+          "200": { "description": "Transferência realizada" },
+          "400": { "description": "Dados inválidos ou saldo insuficiente" },
+          "401": { "description": "Token ausente ou inválido" },
+          "403": { "description": "Transferência não permitida" }
+        }
+      }
+    }
         "responses": {
           "201": { "description": "Usuário registrado" },
           "409": { "description": "Usuário já existe" },
@@ -80,8 +108,8 @@
           "200": { "description": "Login realizado" },
           "401": { "description": "Credenciais inválidas" },
           "400": { "description": "Dados inválidos" }
-          },
-          "default": {
+        },
+        "default": {
             "description": "Exemplo de resposta",
             "content": {
               "application/json": {

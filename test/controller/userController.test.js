@@ -21,42 +21,42 @@ describe('User Controller', () => {
 
 		it('deve registrar usuário novo', async () => {
 			let receivedReq;
-			const stub = sinon.stub(userService, 'register').callsFake((req, res) => {
-				receivedReq = req.body;
-				if (req.body.login && req.body.senha) {
-					res.status(201).json({ message: 'Usuário registrado com sucesso.' });
-				}
-			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
-			app.use('/user', userController);
-			const res = await request(app)
-				.post('/user/register')
-				.send({ login: 'novo', senha: '123' });
-			expect(receivedReq).to.deep.equal({ login: 'novo', senha: '123' });
-			expect(res.status).to.equal(201);
-			expect(res.body.message).to.equal('Usuário registrado com sucesso.');
-			stub.restore();
+					const stub = sinon.stub(userService, 'register').callsFake((req, res) => {
+						receivedReq = req.body;
+						if (req.body.login && req.body.senha && typeof req.body.saldo === 'number') {
+							res.status(201).json({ message: 'Usuário registrado com sucesso.' });
+						}
+					});
+					delete require.cache[require.resolve('../../controller/userController')];
+					const userController = require('../../controller/userController');
+					app.use('/user', userController);
+					const res = await request(app)
+						.post('/user/register')
+						.send({ login: 'novo', senha: '123', saldo: 100 });
+					expect(receivedReq).to.deep.equal({ login: 'novo', senha: '123', saldo: 100 });
+					expect(res.status).to.equal(201);
+					expect(res.body.message).to.equal('Usuário registrado com sucesso.');
+					stub.restore();
 		});
 
 		it('não deve registrar usuário duplicado', async () => {
 			let receivedReq;
-			const stub = sinon.stub(userService, 'register').callsFake((req, res) => {
-				receivedReq = req.body;
-				if (req.body.login === 'existente') {
-					res.status(409).json({ error: 'Usuário já existe.' });
-				}
-			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
-			app.use('/user', userController);
-			const res = await request(app)
-				.post('/user/register')
-				.send({ login: 'existente', senha: '123' });
-			expect(receivedReq).to.deep.equal({ login: 'existente', senha: '123' });
-			expect(res.status).to.equal(409);
-			expect(res.body.error).to.equal('Usuário já existe.');
-			stub.restore();
+					const stub = sinon.stub(userService, 'register').callsFake((req, res) => {
+						receivedReq = req.body;
+						if (req.body.login === 'existente') {
+							res.status(409).json({ error: 'Usuário já existe.' });
+						}
+					});
+					delete require.cache[require.resolve('../../controller/userController')];
+					const userController = require('../../controller/userController');
+					app.use('/user', userController);
+					const res = await request(app)
+						.post('/user/register')
+						.send({ login: 'existente', senha: '123', saldo: 50 });
+					expect(receivedReq).to.deep.equal({ login: 'existente', senha: '123', saldo: 50 });
+					expect(res.status).to.equal(409);
+					expect(res.body.error).to.equal('Usuário já existe.');
+					stub.restore();
 		});
 
 		it('deve logar usuário válido e receber token', async () => {
