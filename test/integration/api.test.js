@@ -22,11 +22,11 @@ describe('Testes de Integração', function() {
   });
 
   it('não deve registrar usuário duplicado', async function() {
-  // Primeiro registro (deve ser sucesso)
-  await request.post('/users/register').send(user1);
-  // Segundo registro (duplicado)
-  const res = await request.post('/users/register').send(user1);
-  assert.strictEqual(res.status, 409);
+    // Primeiro registro
+    await request.post('/users/register').send(user1);
+    // Segundo registro (duplicado)
+    const res = await request.post('/users/register').send(user1);
+    assert.strictEqual(res.status, 409);
   });
 
   it('deve registrar outro usuário', async function() {
