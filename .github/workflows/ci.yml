@@ -41,12 +41,13 @@ jobs:
           name: Controller Tests
           path: results-controller.xml
           reporter: java-junit
+          fail-on-error: false
 
       # Subir a API em background
       - name: Subir API
         run: npm start &
       
-      # Esperar API estar disponível
+      # Esperar API estar funcionando
       - name: Aguardar API na porta 3000
         run: |
           for i in {1..20}; do
@@ -62,6 +63,10 @@ jobs:
       - name: Rodar testes de Integração
         run: npm run test-integration -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-integration.xml
 
+      - name: Debug - Ver relatório de integração
+        if: always()
+        run: cat results-integration.xml || echo "⚠️ Nenhum arquivo de resultados encontrado"
+
       - name: Publicar relatório Integração
         uses: dorny/test-reporter@v1
         if: always()
@@ -69,10 +74,15 @@ jobs:
           name: Integration Tests
           path: results-integration.xml
           reporter: java-junit
+          fail-on-error: false
 
       # Testes externos GraphQL
       - name: Rodar testes externos GraphQL
         run: npx mocha test/external/graphqlTransfer.test.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=results-graphql.xml
+
+      - name: Debug - Ver relatório GraphQL
+        if: always()
+        run: cat results-graphql.xml || echo "⚠️ Nenhum arquivo de resultados encontrado"
 
       - name: Publicar relatório GraphQL
         uses: dorny/test-reporter@v1
@@ -81,3 +91,4 @@ jobs:
           name: GraphQL Tests
           path: results-graphql.xml
           reporter: java-junit
+          fail-on-error: false
