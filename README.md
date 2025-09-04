@@ -131,7 +131,8 @@ Todos os cenários de integração e controller passaram com sucesso (21 passing
 
 Os testes são organizados em:
 - `test/controller/`: testes unitários dos controllers
-- `test/integration/`: testes de integração da API
+- `test/external/`: testes de integração da API
+- `test/mutation/`: testes Mutation GraphQL
 
 
 Pipeline de integração contínua configurada via GitHub Actions (`.github/workflows/ci.yml`), que executa todos os testes automaticamente a cada push ou pull request para o branch `main`.

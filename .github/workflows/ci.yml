@@ -61,18 +61,18 @@ jobs:
 
       # Testes de Integração
       - name: Rodar testes de Integração
-        run: npm run test-integration -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-integration.xml || true
+        run: npm run test-external -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-external.xml || true
 
       - name: Debug - Ver relatório de integração
         if: always()
-        run: cat results-integration.xml || echo "⚠️ Nenhum arquivo de resultados encontrado"
+        run: cat results-external.xml || echo "⚠️ Nenhum arquivo de resultados encontrado"
 
       - name: Publicar relatório Integração
         uses: dorny/test-reporter@v1
         if: always()
         with:
-          name: Integration Tests
-          path: results-integration.xml
+          name: External Tests
+          path: results-external.xml
           reporter: java-junit
           fail-on-error: false
 
