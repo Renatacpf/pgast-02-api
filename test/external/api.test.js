@@ -1,5 +1,6 @@
 const request = require('supertest')('http://localhost:3000');
 const assert = require('assert');
+const { expect } = require('chai');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'supersecret';
 
@@ -19,6 +20,9 @@ describe('Testes de Integração', function() {
   const res = await request.post('/users/register').send({ login: uniqueLogin, senha: '123', favorecido: true, saldo: 100 });
   assert.strictEqual(res.status, 201);
   assert(res.body.message.includes('sucesso'));
+  // Validação com um Fixture
+  const respostaEsperada = require('../fixture/respostas/deveRegistrarUsuarioNovo.json')
+  expect(res.body).to.deep.equal(respostaEsperada);
   });
 
   it('não deve registrar usuário duplicado', async function() {
@@ -27,6 +31,9 @@ describe('Testes de Integração', function() {
   // Segundo registro (duplicado)
   const res = await request.post('/users/register').send(user1);
   assert.strictEqual(res.status, 409);
+  // Validação com um Fixture
+  const respostaEsperada = require('../fixture/respostas/naoDeveRegistrarUsuarioDuplicado.json')
+  expect(res.body).to.deep.equal(respostaEsperada);
   });
 
   it('deve registrar outro usuário', async function() {
@@ -40,6 +47,11 @@ describe('Testes de Integração', function() {
     assert(res.body.message.includes('sucesso'));
     assert(res.body.token);
     token = res.body.token;
+  // Validação com um Fixture
+  const respostaEsperada = require('../fixture/respostas/deveLogarUsuarioValidoEReceberToken.json')
+  delete res.body.token;
+  delete respostaEsperada.token;
+  expect(res.body).to.deep.equal(respostaEsperada);
   });
 
   it('não deve logar com senha errada', async function() {
@@ -94,6 +106,9 @@ describe('Testes de Integração', function() {
     await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user1', saldo: 10000 });
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user1', valor: 6000 });
     assert.strictEqual(res.status, 200);
+    // Validação com um Fixture
+    const respostaEsperada = require('../fixture/respostas/deveTransferirValorParaFavorecidoComToken.json')
+    expect(res.body).to.deep.equal(respostaEsperada);
   });
 
   it('não deve transferir valor alto para não favorecido com token', async function() {

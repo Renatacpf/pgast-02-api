@@ -1,0 +1,40 @@
+[
+  {
+    "login": "user_1757164680439",
+    "senha": "123",
+    "favorecido": true,
+    "saldo": 100
+  },
+  { "login": "user1", "senha": "123", "favorecido": true, "saldo": 9900 },
+  {
+    "login": "user_1757165226800",
+    "senha": "123",
+    "favorecido": true,
+    "saldo": 100
+  },
+  { "login": "user3", "senha": "789", "favorecido": false, "saldo": 10100 },
+  {
+    "login": "user_1757165407439",
+    "senha": "123",
+    "favorecido": true,
+    "saldo": 100
+  },
+  {
+    "login": "user_1757165433256",
+    "senha": "123",
+    "favorecido": true,
+    "saldo": 100
+  },
+  {
+    "login": "user_1757165496065",
+    "senha": "123",
+    "favorecido": true,
+    "saldo": 100
+  },
+  {
+    "login": "user2",
+    "senha": "456",
+    "favorecido": false,
+    "saldo": 50
+  }
+]
