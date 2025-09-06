@@ -113,14 +113,14 @@ describe('Testes de Integração', function() {
 
   it('não deve transferir valor alto para não favorecido com token', async function() {
     await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user1', saldo: 10000 });
-  await request.post('/users/register').send({ login: 'user3', senha: '789', favorecido: false, saldo: 0 });
+    await request.post('/users/register').send({ login: 'user3', senha: '789', favorecido: false, saldo: 0 });
     await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user3', valor: 6000 });
     assert.strictEqual(res.status, 403);
   });
 
   it('deve transferir valor baixo para não favorecido com token', async function() {
-  await request.put('/users').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
+    await request.post('/transfers').set('Authorization', `Bearer ${token}`).send({ login: 'user3', saldo: 10000 });
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user3', valor: 100 });
     assert.strictEqual(res.status, 200);
   });

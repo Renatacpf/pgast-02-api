@@ -5,9 +5,15 @@
     "version": "1.0.0",
     "description": "API para login, registro, consulta de usuários e transferências."
   },
+  "tags": [
+    { "name": "Cadastro", "description": "APIs de registro e login de usuários" },
+    { "name": "Consulta", "description": "APIs de consulta de usuários e transferências" },
+    { "name": "Transferência", "description": "APIs de transferência de valores" }
+  ],
   "paths": {
     "/users/register": {
       "post": {
+        "tags": ["Cadastro"],
         "summary": "Registrar novo usuário",
         "requestBody": {
           "required": true,
@@ -34,6 +40,7 @@
     },
     "/users/login": {
       "post": {
+        "tags": ["Cadastro"],
         "summary": "Login de usuário",
         "requestBody": {
           "required": true,
@@ -58,15 +65,63 @@
     },
     "/users": {
       "get": {
+        "tags": ["Consulta"],
         "summary": "Listar usuários",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": { "description": "Lista de usuários" }
         }
+      },
+      "put": {
+        "tags": ["Cadastro"],
+        "summary": "Atualizar usuário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": { "type": "string" },
+                  "senha": { "type": "string" },
+                  "favorecido": { "type": "boolean" },
+                  "saldo": { "type": "number" }
+                },
+                "required": ["login"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado com sucesso" },
+          "400": { "description": "Login obrigatório" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Cadastro"],
+        "summary": "Remover usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Login do usuário a ser removido"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Usuário removido com sucesso" },
+          "400": { "description": "Login obrigatório" },
+          "404": { "description": "Usuário não encontrado" }
+        }
       }
     },
     "/transfers": {
       "post": {
+        "tags": ["Transferência"],
         "summary": "Realizar transferência",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -92,6 +147,7 @@
         }
       },
       "get": {
+        "tags": ["Consulta"],
         "summary": "Listar transferências",
         "security": [{ "bearerAuth": [] }],
         "responses": {

@@ -29,5 +29,7 @@ module.exports = gql`
     loginUser(login: String!, senha: String!): AuthPayload
     "Mutation de transferência exige autenticação JWT via header Authorization"
     createTransfer(remetente: String!, destinatario: String!, valor: Float!): Transfer
+    updateUser(login: String!, senha: String, favorecido: Boolean, saldo: Float): AuthPayload
+    removeUser(login: String!): AuthPayload
   }
 `;

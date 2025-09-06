@@ -91,6 +91,20 @@ query {
   
    Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
 
+
+### Consulta
+- GET `/users` (protegido, requer token)
+- GET `/transfers` (protegido, requer token)
+
+### Cadastro/Atualização/Remoção
+- POST `/users/register`  
+   Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
+- POST `/users/login`  
+   Body: `{ "login": "string", "senha": "string" }`
+- PUT `/users` (protegido, requer token)
+   Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
+- DELETE `/users?login=string` (protegido, requer token)
+
 ### Transferências
 - POST `/transfer`  
    Body: `{ "remetente": "string", "destinatario": "string", "valor": number }`
@@ -176,6 +190,7 @@ mutation {
 }
 ```
 
+
 ### Transferência (autenticado)
 ```graphql
 mutation {
@@ -183,6 +198,24 @@ mutation {
       remetente
       destinatario
       valor
+   }
+}
+```
+
+### Atualizar usuário (autenticado)
+```graphql
+mutation {
+   updateUser(login: "userA", senha: "novaSenha", favorecido: true, saldo: 2000) {
+      message
+   }
+}
+```
+
+### Remover usuário (autenticado)
+```graphql
+mutation {
+   removeUser(login: "userA") {
+      message
    }
 }
 ```

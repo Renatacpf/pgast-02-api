@@ -52,5 +52,26 @@ module.exports = {
       transferRepository.addTransfer({ remetente, destinatario, valor, data: new Date().toISOString() });
       return { remetente, destinatario, valor };
     },
+
+    updateUser: (parent, { login, senha, favorecido, saldo }, context) => {
+      if (!context.user) throw new Error('Token inválido ou ausente');
+      if (!login) throw new Error('Login obrigatório.');
+      const userRepository = require('../model/userModel');
+      const user = userRepository.findByLogin(login);
+      if (!user) throw new Error('Usuário não encontrado.');
+      if (senha !== undefined) user.senha = senha;
+      if (favorecido !== undefined) user.favorecido = !!favorecido;
+      if (saldo !== undefined) user.saldo = saldo;
+      return { message: 'Usuário atualizado com sucesso.' };
+    },
+
+    removeUser: (parent, { login }, context) => {
+      if (!context.user) throw new Error('Token inválido ou ausente');
+      if (!login) throw new Error('Login obrigatório.');
+      const userRepository = require('../model/userModel');
+      const removed = userRepository.removeUser(login);
+      if (!removed) throw new Error('Usuário não encontrado.');
+      return { message: 'Usuário removido com sucesso.' };
+    },
   },
 };
