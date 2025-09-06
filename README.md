@@ -29,186 +29,181 @@ Acesse a documentação Swagger em: [http://localhost:3000/api-docs](http://loca
 
 ## Uso da API GraphQL
 1. Instale as dependências adicionais:
-    ```bash
-    npm install apollo-server-express graphql jsonwebtoken
-    ```
-2. Inicie o servidor GraphQL:
-    ```bash
-    node graphql/server.js
-    ```
-3. Acesse o playground em: [http://localhost:4000/graphql](http://localhost:4000/graphql)
+   # API de Transferências e Usuários
 
-   registerUser(login: "novo", senha: "123", favorecido: true) {
-      message
+   API REST e GraphQL para cadastro, consulta, atualização, remoção de usuários e transferências bancárias.
+
+   ## Sumário
+   - [Instalação](#instalação)
+   - [Execução](#execução)
+   - [Endpoints REST](#endpoints-rest)
+   - [Mutations e Queries GraphQL](#graphql)
+   - [Autenticação JWT](#autenticação-jwt)
+   - [Regras de Negócio](#regras-de-negócio)
+   - [Testes Automatizados](#testes-automatizados)
+
+   ## Instalação
+   ```bash
+   npm install
+   ```
+
+   ## Execução
+   ```bash
+   npm start
+   ```
+   Acesse a documentação Swagger em: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+
+   ## Endpoints REST
+
+   ### Cadastro
+   - POST `/users/register`
+      ```json
+      {
+         "login": "string",
+         "senha": "string",
+         "favorecido": true,
+         "saldo": 1000
+      }
+      ```
+   - POST `/users/login`
+      ```json
+      {
+         "login": "string",
+         "senha": "string"
+      }
+      ```
+
+   ### Consulta
+   - GET `/users` (protegido, requer token)
+   - GET `/transfers` (protegido, requer token)
+
+   ### Atualização
+   - PUT `/users` (protegido, requer token)
+      ```json
+      {
+         "login": "string",
+         "senha": "string",
+         "favorecido": true,
+         "saldo": 2000
+      }
+      ```
+
+   ### Remoção
+   - DELETE `/users?login=string` (protegido, requer token)
+
+   ### Transferência
+   - POST `/transfers` (protegido, requer token)
+      ```json
+      {
+         "remetente": "string",
+         "destinatario": "string",
+         "valor": 100
+      }
+      ```
+
+   ## GraphQL
+
+   ### Cadastro
+   ```graphql
+   mutation {
+      registerUser(login: "userA", senha: "123", favorecido: true, saldo: 1000) {
+         message
+      }
    }
-mutation {
-   loginUser(login: "novo", senha: "123") {
-      token
-      message
+   ```
+
+   ### Login
+   ```graphql
+   mutation {
+      loginUser(login: "userA", senha: "123") {
+         token
+         message
+      }
    }
-}
-```
+   ```
 
-#### Criar Transferência (requer token JWT)
-```graphql
-mutation {
-   createTransfer(remetente: "novo", destinatario: "user2", valor: 100) {
-      remetente
-      destinatario
-      valor
+   ### Consulta de usuários
+   ```graphql
+   query {
+      users {
+         login
+         favorecido
+         saldo
+      }
    }
-}
-```
-No playground, adicione o header:
-```
-{
-   "Authorization": "Bearer SEU_TOKEN_AQUI"
-}
-```
+   ```
 
-#### Consultar Usuários (requer token JWT)
-```graphql
-query {
-   users {
-      login
-      favorecido
+   ### Consulta de transferências
+   ```graphql
+   query {
+      transfers {
+         remetente
+         destinatario
+         valor
+      }
    }
-}
-```
+   ```
 
-#### Consultar Transferências (requer token JWT)
-```graphql
-query {
-   transfers {
-      remetente
-      destinatario
-      valor
+   ### Atualizar usuário
+   ```graphql
+   mutation {
+      updateUser(login: "userA", senha: "novaSenha", favorecido: true, saldo: 2000) {
+         message
+      }
    }
-## Endpoints Principais
-### Autenticação
-- POST `/users/login`  
-   Body: `{ "login": "string", "senha": "string" }`
-  
-   Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
+   ```
 
-
-### Consulta
-- GET `/users` (protegido, requer token)
-- GET `/transfers` (protegido, requer token)
-
-### Cadastro/Atualização/Remoção
-- POST `/users/register`  
-   Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
-- POST `/users/login`  
-   Body: `{ "login": "string", "senha": "string" }`
-- PUT `/users` (protegido, requer token)
-   Body: `{ "login": "string", "senha": "string", "favorecido": true|false, "saldo": number }`
-- DELETE `/users?login=string` (protegido, requer token)
-
-### Transferências
-- POST `/transfer`  
-   Body: `{ "remetente": "string", "destinatario": "string", "valor": number }`
-
-## Autenticação JWT
-Após o login, utilize o token JWT retornado para acessar rotas protegidas:
-```bash
-curl -H "Authorization: Bearer <token>" http://localhost:3000/users
-```
-
-## Testes Automatizados e Integração Contínua
-
-Execute todos os testes automatizados localmente:
-```bash
-npx mocha "test/**/*.js"
-```
-
-Todos os cenários de integração e controller passaram com sucesso (21 passing).
-
-- `test/mutation/`: testes Mutation GraphQL
-
-
-Pipeline de integração contínua configurada via GitHub Actions (`.github/workflows/ci.yml`), que executa todos os testes automaticamente a cada push ou pull request para o branch `main`.
-O relatório dos testes é publicado visualmente no summary do workflow, acessível diretamente pela interface do GitHub Actions, sem necessidade de download.
-
-## Observações
-- Transferência para favorecido: sem limite
-- Transferência para não favorecido: até R$ 1000,00
-- Saldo do remetente deve ser suficiente
-- Token expira em 10 minutos
-
-## Uso do token nas rotas protegidas
-```bash
-curl -H "Authorization: Bearer <token>" http://localhost:3000/users
-```
-
-## Testes de autenticação
-
-Os testes automatizados validam cenários de token válido, inválido e expirado.
-
-## Regras de Negócio
-- Login, senha e saldo obrigatórios para registro
-- Login e senha obrigatórios para login
-- Não é permitido registrar usuários duplicados
-- Transferências acima de R$ 5.000,00 só para favorecidos
-- Transferências para não favorecidos só podem ser realizadas se o valor for menor que R$ 5.000,00
-- Banco de dados em memória (variáveis)
-
-## Testes Automatizados
-
-Os testes estão em `test/api.test.js` e cobrem todos os fluxos principais.
-
-# Testes automatizados externos GraphQL
-
-Os testes de mutation de transferência via GraphQL estão em `test/external/graphqlTransfer.test.js` e cobrem:
-- Transferência com sucesso
-- Sem saldo disponível
-- Token não informado
-
-Execute todos os testes com:
-```bash
-npm test
-```
-
-## Exemplo de Mutation GraphQL
-
-### Registrar usuário
-```graphql
-mutation {
-   registerUser(login: "userA", senha: "123", favorecido: true, saldo: 1000) {
-      message
+   ### Remover usuário
+   ```graphql
+   mutation {
+      removeUser(login: "userA") {
+         message
+      }
    }
-}
-```
+   ```
 
-### Login para obter token
-```graphql
-mutation {
-   loginUser(login: "userA", senha: "123") {
-      token
-      message
+   ### Transferência
+   ```graphql
+   mutation {
+      createTransfer(remetente: "userA", destinatario: "userB", valor: 100) {
+         remetente
+         destinatario
+         valor
+      }
    }
-}
-```
+   ```
 
-
-### Transferência (autenticado)
-```graphql
-mutation {
-   createTransfer(remetente: "userA", destinatario: "userB", valor: 100) {
-      remetente
-      destinatario
-      valor
+   No playground GraphQL, adicione o header:
+   ```
+   {
+      "Authorization": "Bearer SEU_TOKEN_AQUI"
    }
-}
-```
+   ```
 
-### Atualizar usuário (autenticado)
-```graphql
-mutation {
-   updateUser(login: "userA", senha: "novaSenha", favorecido: true, saldo: 2000) {
-      message
-   }
-}
+   ## Autenticação JWT
+   Após o login, utilize o token JWT retornado para acessar rotas protegidas:
+   ```bash
+   curl -H "Authorization: Bearer <token>" http://localhost:3000/users
+   ```
+
+   ## Regras de Negócio
+   - Login, senha e saldo obrigatórios para registro
+   - Login e senha obrigatórios para login
+   - Não é permitido registrar usuários duplicados
+   - Transferências acima de R$ 5.000,00 só para favorecidos
+   - Transferências para não favorecidos só podem ser realizadas se o valor for menor que R$ 5.000,00
+   - Saldo do remetente deve ser suficiente
+   - Token expira em 10 minutos
+
+   ## Testes Automatizados
+   Execute todos os testes automatizados localmente:
+   ```bash
+   npm test
+   ```
+   Os testes cobrem todos os cenários das APIs REST e GraphQL, incluindo autenticação, regras de negócio, erros e integrações.
+
+   ---
+   Autor: Renata França
 ```
 
 ### Remover usuário (autenticado)
