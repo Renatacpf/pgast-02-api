@@ -1,0 +1,7 @@
+{ 
+    "query": "mutation Login($login: String!, $senha: String!) {  loginUser(login: $login, senha: $senha) { token }}", 
+    "variables": { 
+        "login": "remetente", 
+        "senha": "123" 
+    } 
+}

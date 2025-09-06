@@ -2,6 +2,7 @@ const request = require('supertest');
 const chai = require('chai');
 const expect = chai.expect;
 const app = require('../../../graphql/app');
+const { login } = require('../../../service/userService');
 
 const TRANSFER_MUTATION = `mutation Transfer($remetente: String!, $destinatario: String!, $valor: Float!) {
   createTransfer(remetente: $remetente, destinatario: $destinatario, valor: $valor) {
@@ -39,9 +40,11 @@ describe('GraphQL Mutation: createTransfer', function() {
         variables: { login: destinatario, senha: '456', favorecido: false, saldo: 0 }
       });
     // Login remetente
+    const loginUser = require('../fixture/requisicoes/login/loginUser.json');
+    loginUser.variables.login = remetente;
     const res = await request(app)
       .post('/graphql')
-      .send({ query: LOGIN_MUTATION, variables: { login: remetente, senha: '123' } });
+      .send(loginUser);
     // Log para depuração
     // eslint-disable-next-line no-console
     console.log('LOGIN RESPONSE:', JSON.stringify(res.body, null, 2));
@@ -50,17 +53,23 @@ describe('GraphQL Mutation: createTransfer', function() {
   });
 
   it('a) Transferência com sucesso', async function() {
+    const createTransfer = require('../fixture/requisicoes/transferencia/createTransfer.json');
+    createTransfer.variables.remetente = remetente;
+    createTransfer.variables.destinatario = destinatario;
     const res = await request(app)
       .post('/graphql')
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        query: TRANSFER_MUTATION,
-        variables: { remetente, destinatario, valor: 100 }
-      });
+      .send(createTransfer);
     expect(res.body.data.createTransfer.remetente).to.equal(remetente);
     expect(res.body.data.createTransfer.destinatario).to.equal(destinatario);
     expect(res.body.data.createTransfer.valor).to.equal(100);
-  });
+
+    //Validação com um Fixture
+    const respostaEsperada = require('../fixture/respostas/transferencia/transferenciaComSucesso.json');
+    respostaEsperada.data.createTransfer.remetente = remetente;
+    respostaEsperada.data.createTransfer.destinatario = destinatario;
+    expect(res.body).to.deep.equal(respostaEsperada);
+    });
 
   it('b) Sem saldo disponível para transferência', async function() {
     // Cria destinatário favorecido para garantir que a regra de saldo seja testada

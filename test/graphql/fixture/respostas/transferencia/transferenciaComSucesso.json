@@ -1,0 +1,9 @@
+{
+  "data": {
+    "createTransfer": {
+      "remetente": "userA_1757181175253",
+      "destinatario": "userB_1757181175253",
+      "valor": 100
+    }
+  }
+}
