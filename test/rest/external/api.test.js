@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'supersecret';
 
 describe('Testes de Integração', function() {
-  const userRepository = require('../../model/userModel');
+  const userRepository = require('../../../model/userModel');
 
   beforeEach(function() {
     userRepository.clearUsers();
@@ -107,7 +107,7 @@ describe('Testes de Integração', function() {
     const res = await request.post('/transfer').set('Authorization', `Bearer ${token}`).send({ remetente: 'user1', destinatario: 'user1', valor: 6000 });
     assert.strictEqual(res.status, 200);
     // Validação com um Fixture
-    const respostaEsperada = require('../fixture/respostas/deveTransferirValorParaFavorecidoComToken.json')
+  const respostaEsperada = require('../fixture/respostas/deveTransferirValorParaFavorecidoComToken.json')
     expect(res.body).to.deep.equal(respostaEsperada);
   });
 

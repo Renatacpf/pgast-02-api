@@ -13,8 +13,8 @@ describe('User Controller', () => {
 	let userService;
 
 		beforeEach(() => {
-			delete require.cache[require.resolve('../../service/userService')];
-			userService = require('../../service/userService');
+			 delete require.cache[require.resolve('../../../service/userService')];
+			 userService = require('../../../service/userService');
 			app = express();
 			app.use(express.json());
 		});
@@ -27,8 +27,8 @@ describe('User Controller', () => {
 							res.status(201).json({ message: 'Usuário registrado com sucesso.' });
 						}
 					});
-					delete require.cache[require.resolve('../../controller/userController')];
-					const userController = require('../../controller/userController');
+					 delete require.cache[require.resolve('../../../controller/userController')];
+					 const userController = require('../../../controller/userController');
 					app.use('/user', userController);
 					const res = await request(app)
 						.post('/user/register')
@@ -47,8 +47,8 @@ describe('User Controller', () => {
 							res.status(409).json({ error: 'Usuário já existe.' });
 						}
 					});
-					delete require.cache[require.resolve('../../controller/userController')];
-					const userController = require('../../controller/userController');
+					delete require.cache[require.resolve('../../../controller/userController')];
+					const userController = require('../../../controller/userController');
 					app.use('/user', userController);
 					const res = await request(app)
 						.post('/user/register')
@@ -67,8 +67,8 @@ describe('User Controller', () => {
 					res.json({ message: 'Login realizado com sucesso.', token: 'fake-token' });
 				}
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.post('/user/login')
@@ -89,8 +89,8 @@ describe('User Controller', () => {
 					res.status(401).json({ error: 'Credenciais inválidas.' });
 				}
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.post('/user/login')
@@ -107,8 +107,8 @@ describe('User Controller', () => {
 				receivedReq = req.query;
 				res.json([{ login: 'user1' }, { login: 'user2' }]);
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.get('/user');
@@ -127,8 +127,8 @@ describe('User Controller', () => {
 					res.status(400).json({ error: 'Login obrigatório.' });
 				}
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.put('/user')
@@ -146,8 +146,8 @@ describe('User Controller', () => {
 					res.json({ message: 'Usuário removido com sucesso.' });
 				}
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.delete('/user')
@@ -167,8 +167,8 @@ describe('User Controller', () => {
 					res.status(404).json({ error: 'Usuário não encontrado.' });
 				}
 			});
-			delete require.cache[require.resolve('../../controller/userController')];
-			const userController = require('../../controller/userController');
+			delete require.cache[require.resolve('../../../controller/userController')];
+			const userController = require('../../../controller/userController');
 			app.use('/user', userController);
 			const res = await request(app)
 				.delete('/user')

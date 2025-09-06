@@ -1,7 +1,7 @@
 const request = require('supertest');
 const chai = require('chai');
 const expect = chai.expect;
-const app = require('../../graphql/app');
+const app = require('../../../graphql/app');
 
 const TRANSFER_MUTATION = `mutation Transfer($remetente: String!, $destinatario: String!, $valor: Float!) {
   createTransfer(remetente: $remetente, destinatario: $destinatario, valor: $valor) {

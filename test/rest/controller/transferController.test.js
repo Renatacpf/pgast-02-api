@@ -8,8 +8,8 @@ describe('Transfer Controller', () => {
 	let transferService;
 
 		beforeEach(async () => {
-		delete require.cache[require.resolve('../../service/transferService')];
-			transferService = require('../../service/transferService');
+		 delete require.cache[require.resolve('../../../service/transferService')];
+		 transferService = require('../../../service/transferService');
 			// Importa chai dinamicamente para evitar erro de ES Module
 			if (!expect) {
 				const chai = await import('chai');
@@ -20,8 +20,8 @@ describe('Transfer Controller', () => {
 	});
 
 		function mountController() {
-			delete require.cache[require.resolve('../../controller/transferController')];
-			const transferController = require('../../controller/transferController');
+			 delete require.cache[require.resolve('../../../controller/transferController')];
+			 const transferController = require('../../../controller/transferController');
 			app.use('/transfer', transferController);
 		}
 
