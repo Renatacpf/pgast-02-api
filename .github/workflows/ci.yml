@@ -32,7 +32,7 @@ jobs:
 
       # Testes de Controller
       - name: Rodar testes do Controller
-        run: npm run test-controller -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-controller.xml
+        run: npm run test-rest-controller -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-controller.xml
 
       - name: Publicar relatório Controller
         uses: dorny/test-reporter@v1
@@ -61,7 +61,7 @@ jobs:
 
       # Testes de Integração
       - name: Rodar testes de Integração
-        run: npm run test-external -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-external.xml || true
+        run: npm run test-rest-external -- --reporter mocha-junit-reporter --reporter-options mochaFile=results-external.xml || true
 
       - name: Debug - Ver relatório de integração
         if: always()
